@@ -15,7 +15,7 @@ From: ubuntu:bionic
         git \
         #zlib1g-dev \
         #libgsl-dev \
-        curl \
+        curl && 
    	export LC_ALL=C.UTF-8
     export LANG=C.UTF-8
     echo 'export LC_ALL=C.UTF-8' >> $SINGULARITY_ENVIRONMENT
@@ -58,4 +58,4 @@ From: ubuntu:bionic
     ln -s /usr/lib/R/site-library/littler/examples/install.r /usr/local/bin/install.r
 
     export LIBLOC=/opt/R/${R_VERSION}/lib/R/library
-    install.r optparse tools ggplots reshape2 plyr gtools LDheatmap
+    install.r optparse tools ggplot2 reshape2 plyr gtools LDheatmap
