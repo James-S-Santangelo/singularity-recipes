@@ -10,7 +10,7 @@ From: ubuntu:bionic
     
     apt-get --quiet update && \
     apt-get --quiet --yes install \
-        build-essentials \
+        build-essential \
         wget \
         git \
         #zlib1g-dev \
@@ -27,6 +27,7 @@ From: ubuntu:bionic
 	# ===========================
 
 	R_VERSION=3.6.3
+    apt-get --quiet update &&
 	apt-get --quiet --yes install \
 		gfortran \
 		libreadline-dev \
@@ -35,7 +36,7 @@ From: ubuntu:bionic
 		liblzma-dev \
 		libblas-dev \
 		libpcre3-dev \
-		libcurl4-openssl-dev
+		libcurl4-openssl-dev &&
 	curl -O https://cran.rstudio.com/src/base/R-3/R-${R_VERSION}.tar.gz
 	tar -xzvf R-${R_VERSION}.tar.gz
 	cd R-${R_VERSION}
@@ -50,3 +51,11 @@ From: ubuntu:bionic
 	make install
 	ln -s /opt/R/${R_VERSION}/bin/R /usr/local/bin/R
 	ln -s /opt/R/${R_VERSION}/bin/Rscript /usr/local/bin/Rscript
+    cd ~
+
+    apt-get -y update &&
+    apt-get -y install littler &&
+    ln -s /usr/lib/R/site-library/littler/examples/install.r /usr/local/bin/install.r
+
+    export LIBLOC=/opt/R/${R_VERSION}/lib/R/library
+    install.r optparse tools ggplots reshape2 plyr gtools LDheatmap
