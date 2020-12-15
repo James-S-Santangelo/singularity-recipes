@@ -1,0 +1,14 @@
+Bootstrap: docker
+From: debian:7
+
+%labels
+    
+    AUTHOR James Santangelo
+    EMAIL james.santangelo37@gmail.com
+
+%post
+    
+    apt-get update --guiet && \
+    apt-get install --quiet --yes \
+        build-essentials \
+    && apt-get clean
