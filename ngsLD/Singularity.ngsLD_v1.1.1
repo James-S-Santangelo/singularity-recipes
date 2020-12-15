@@ -1,5 +1,5 @@
 Bootstrap: docker
-From: debian:7
+From: ubuntu:bionic
 
 %labels
     
@@ -8,7 +8,45 @@ From: debian:7
 
 %post
     
-    apt-get update --guiet && \
-    apt-get install --quiet --yes \
+    apt-get --quiet update && \
+    apt-get --quiet --yes install \
         build-essentials \
-    && apt-get clean
+        wget \
+        git \
+        #zlib1g-dev \
+        #libgsl-dev \
+        curl \
+   	export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+    echo 'export LC_ALL=C.UTF-8' >> $SINGULARITY_ENVIRONMENT
+    echo 'export LANG=C.UTF-8' >> $SINGULARITY_ENVIRONMENT
+    echo "export PATH=/usr/local:/usr/local/bin:$PATH" >> $SINGULARITY_ENVIRONMENT 
+
+	# ===========================
+	# Install R
+	# ===========================
+
+	R_VERSION=3.6.3
+	apt-get --quiet --yes install \
+		gfortran \
+		libreadline-dev \
+		zlib1g-dev \
+		libbz2-dev \
+		liblzma-dev \
+		libblas-dev \
+		libpcre3-dev \
+		libcurl4-openssl-dev
+	curl -O https://cran.rstudio.com/src/base/R-3/R-${R_VERSION}.tar.gz
+	tar -xzvf R-${R_VERSION}.tar.gz
+	cd R-${R_VERSION}
+	./configure \
+		--prefix=/opt/R/${R_VERSION} \
+		--enable-memory-profiling \
+		--enable-R-shlib \
+		--with-blas \
+		--with-lapack \
+		--with-x=no
+	make
+	make install
+	ln -s /opt/R/${R_VERSION}/bin/R /usr/local/bin/R
+	ln -s /opt/R/${R_VERSION}/bin/Rscript /usr/local/bin/Rscript
