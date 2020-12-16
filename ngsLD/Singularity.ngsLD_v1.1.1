@@ -80,7 +80,16 @@ From: ubuntu:bionic
     make install
     cd ~
 
+	# ===========================
+	# Install ngsLD
+	# ===========================
 
-
-
+    wget https://github.com/fgvieira/ngsLD/archive/v1.1.1.tar.gz
+    tar -xvzf v1.1.1.tar.gz
+    cd ngsLD-1.1.1
+    make
+    ln -sf /root/ngsLD-1.1.1/ngsLD /usr/local/bin/ngsLD
+    ln -sf /root/ngsLD-1.1.1/scripts/fit_LDdecay.R /usr/local/bin/fit_LDdecay.R
+    ln -sf /root/ngsLD-1.1.1/scripts/LD_blocks.sh /usr/local/bin/LD_blocks.sh
+    ln -sf /root/ngsLD-1.1.1/scripts/prune_graph.pl /usr/local/bin/prune_graph.pl
 
