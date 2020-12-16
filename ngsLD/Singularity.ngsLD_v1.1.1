@@ -8,45 +8,56 @@ From: ubuntu:bionic
 
 %post
     
-    apt-get --quiet update && \
-    apt-get --quiet --yes install \
+    apt-get update && \
+    apt-get -y --no-install-recommends install \
         build-essential \
+	gnupg2 \
         wget \
         git \
-        curl 
-   	export LC_ALL=C.UTF-8
-    export LANG=C.UTF-8
-    echo 'export LC_ALL=C.UTF-8' >> $SINGULARITY_ENVIRONMENT
-    echo 'export LANG=C.UTF-8' >> $SINGULARITY_ENVIRONMENT
-    echo "export PATH=/usr/local:/usr/local/bin:$PATH" >> $SINGULARITY_ENVIRONMENT 
+        curl \
+	locales
+    
+    # Configure default locale
+    # Taken from https://github.com/nickjer/singularity-r/blob/master/Singularity.3.6.2
+    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+    locale-gen en_US.utf8
+    /usr/sbin/update-locale LANG=en_US.UTF-8
+    export LC_ALL=en_US.UTF-8
+    export LANG=en_US.UTF-8
 
 	# ===========================
 	# Install R
 	# ===========================
 
-	R_VERSION=3.6.3
-    apt-get --quiet update &&
-	apt-get --quiet --yes install \
-		gfortran \
-		libreadline-dev \
-		zlib1g-dev \
-		libbz2-dev \
-		liblzma-dev \
-		libblas-dev \
-		libpcre3-dev \
-		libcurl4-openssl-dev &&
-	curl -O https://cran.rstudio.com/src/base/R-3/R-${R_VERSION}.tar.gz
-	tar -xzvf R-${R_VERSION}.tar.gz
-	cd R-${R_VERSION}
-	./configure \
-		--prefix=/opt/R/${R_VERSION} \
-		--enable-memory-profiling \
-		--enable-R-shlib \
-		--with-blas \
-		--with-lapack \
-		--with-x=no
-	make
-	make install
-	ln -s /opt/R/${R_VERSION}/bin/R /usr/local/bin/R
-	ln -s /opt/R/${R_VERSION}/bin/Rscript /usr/local/bin/Rscript
-    cd ~
+    # Install R and littler (for package installs)
+    # Inspiration from Dockerfile by Dirk Eddelbuettel
+    # https://github.com/rocker-org/rocker/blob/master/r-base/4.0.3/Dockerfile
+    R_VERSION=4.0.3
+    export DEBIAN_FRONTEND="noninteractive"
+    echo "deb http://cran.r-project.org/bin/linux/ubuntu bionic-cran40/" > /etc/apt/sources.list.d/r.list
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+    apt-get update &&
+    apt-get install -y --no-install-recommends \
+        littler \
+		r-cran-littler \
+		r-base=${R_VERSION}* \
+    	r-base-dev=${R_VERSION}* \
+    	r-recommended=${R_VERSION}* 
+	ln -s /usr/lib/R/site-library/littler/examples/install.r /usr/local/bin/install.r 
+	ln -s /usr/lib/R/site-library/littler/examples/install2.r /usr/local/bin/install2.r 
+	ln -s /usr/lib/R/site-library/littler/examples/installBioc.r /usr/local/bin/installBioc.r 
+	ln -s /usr/lib/R/site-library/littler/examples/installDeps.r /usr/local/bin/installDeps.r 
+	ln -s /usr/lib/R/site-library/littler/examples/installGithub.r /usr/local/bin/installGithub.r 
+	ln -s /usr/lib/R/site-library/littler/examples/testInstalled.r /usr/local/bin/testInstalled.r 
+	install.r docopt 
+	rm -rf /tmp/downloaded_packages/ /tmp/*.rds 
+	rm -rf /var/lib/apt/lists/*
+
+	# Install R packages
+	install.r optparse ggplot2 reshape2 plyr gtools BiocManager
+	
+	# Use Bioconductor to install LDheatmap
+	R -e "BiocManager::install('LDheatmap')" 
+	cd ~
+
+
