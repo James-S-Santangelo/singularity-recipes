@@ -85,6 +85,11 @@ From: ubuntu:bionic
     # Install ngsLD
     # ===========================
 
+    apt-get update &&
+    apt-get -y install \
+        libgsl-dev \
+        zlib1g-dev
+
     wget https://github.com/fgvieira/ngsLD/archive/v1.1.1.tar.gz
     tar -xvzf v1.1.1.tar.gz
     cd ngsLD-1.1.1
