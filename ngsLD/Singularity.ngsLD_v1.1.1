@@ -5,17 +5,18 @@ From: ubuntu:bionic
     
     AUTHOR James Santangelo
     EMAIL james.santangelo37@gmail.com
+    R_VERSION 4.0.3
 
 %post
     
     apt-get update && \
     apt-get -y --no-install-recommends install \
         build-essential \
-	gnupg2 \
+	    gnupg2 \
         wget \
         git \
         curl \
-	locales
+	    locales
     
     # Configure default locale
     # Taken from https://github.com/nickjer/singularity-r/blob/master/Singularity.3.6.2
@@ -26,7 +27,7 @@ From: ubuntu:bionic
     export LANG=en_US.UTF-8
 
 	# ===========================
-	# Install R
+	# Install R and packages
 	# ===========================
 
     # Install R and littler (for package installs)
