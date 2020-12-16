@@ -12,11 +12,11 @@ From: ubuntu:bionic
     apt-get update && \
     apt-get -y --no-install-recommends install \
         build-essential \
-	    gnupg2 \
+        gnupg2 \
         wget \
         git \
         curl \
-	    locales
+        locales
     
     # Configure default locale
     # Taken from https://github.com/nickjer/singularity-r/blob/master/Singularity.3.6.2
@@ -26,9 +26,9 @@ From: ubuntu:bionic
     export LC_ALL=en_US.UTF-8
     export LANG=en_US.UTF-8
 
-	# ===========================
-	# Install R and packages
-	# ===========================
+    # ===========================
+    # Install R and packages
+    # ===========================
 
     # Install R and littler (for package installs)
     # Inspiration from Dockerfile by Dirk Eddelbuettel
@@ -40,30 +40,30 @@ From: ubuntu:bionic
     apt-get update &&
     apt-get install -y --no-install-recommends \
         littler \
-		r-cran-littler \
-		r-base=${R_VERSION}* \
-    	r-base-dev=${R_VERSION}* \
-    	r-recommended=${R_VERSION}* 
-	ln -s /usr/lib/R/site-library/littler/examples/install.r /usr/local/bin/install.r 
-	ln -s /usr/lib/R/site-library/littler/examples/install2.r /usr/local/bin/install2.r 
-	ln -s /usr/lib/R/site-library/littler/examples/installBioc.r /usr/local/bin/installBioc.r 
-	ln -s /usr/lib/R/site-library/littler/examples/installDeps.r /usr/local/bin/installDeps.r 
-	ln -s /usr/lib/R/site-library/littler/examples/installGithub.r /usr/local/bin/installGithub.r 
-	ln -s /usr/lib/R/site-library/littler/examples/testInstalled.r /usr/local/bin/testInstalled.r 
-	install.r docopt 
-	rm -rf /tmp/downloaded_packages/ /tmp/*.rds 
-	rm -rf /var/lib/apt/lists/*
+        r-cran-littler \
+        r-base=${R_VERSION}* \
+        r-base-dev=${R_VERSION}* \
+        r-recommended=${R_VERSION}* 
+    ln -s /usr/lib/R/site-library/littler/examples/install.r /usr/local/bin/install.r 
+    ln -s /usr/lib/R/site-library/littler/examples/install2.r /usr/local/bin/install2.r 
+    ln -s /usr/lib/R/site-library/littler/examples/installBioc.r /usr/local/bin/installBioc.r 
+    ln -s /usr/lib/R/site-library/littler/examples/installDeps.r /usr/local/bin/installDeps.r 
+    ln -s /usr/lib/R/site-library/littler/examples/installGithub.r /usr/local/bin/installGithub.r 
+    ln -s /usr/lib/R/site-library/littler/examples/testInstalled.r /usr/local/bin/testInstalled.r 
+    install.r docopt 
+    rm -rf /tmp/downloaded_packages/ /tmp/*.rds 
+    rm -rf /var/lib/apt/lists/*
 
-	# Install R packages
-	install.r optparse ggplot2 reshape2 plyr gtools BiocManager
-	
-	# Use Bioconductor to install LDheatmap
-	R -e "BiocManager::install('LDheatmap')" 
-	cd ~
+    # Install R packages
+    install.r optparse ggplot2 reshape2 plyr gtools BiocManager
+    
+    # Use Bioconductor to install LDheatmap
+    R -e "BiocManager::install('LDheatmap')" 
+    cd ~
 
-	# ===========================
-	# Install Perl modules
-	# ===========================
+    # ===========================
+    # Install Perl modules
+    # ===========================
 
     apt-get update &&
     apt-get -y install \
@@ -81,9 +81,9 @@ From: ubuntu:bionic
     make install
     cd ~
 
-	# ===========================
-	# Install ngsLD
-	# ===========================
+    # ===========================
+    # Install ngsLD
+    # ===========================
 
     wget https://github.com/fgvieira/ngsLD/archive/v1.1.1.tar.gz
     tar -xvzf v1.1.1.tar.gz
