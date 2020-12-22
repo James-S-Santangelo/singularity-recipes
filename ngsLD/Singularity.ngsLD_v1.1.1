@@ -9,6 +9,10 @@ From: ubuntu:bionic
     PERL_VERSION 5.26.1
     NGSLD_VERSION 1.1.1
 
+%environment
+
+    export PATH="/opt/bin:$PATH"
+
 %post
     
     apt-get update && \
@@ -81,7 +85,6 @@ From: ubuntu:bionic
     perl Makefile.PL
     make
     make install
-    cd ~
 
     # ===========================
     # Install ngsLD
@@ -92,12 +95,13 @@ From: ubuntu:bionic
         libgsl-dev \
         zlib1g-dev
 
+    cd /opt && mkdir bin
     wget https://github.com/fgvieira/ngsLD/archive/v1.1.1.tar.gz
     tar -xvzf v1.1.1.tar.gz
     cd ngsLD-1.1.1
     make
-    ln -sf /root/ngsLD-1.1.1/ngsLD /usr/local/bin/ngsLD
-    ln -sf /root/ngsLD-1.1.1/scripts/fit_LDdecay.R /usr/local/bin/fit_LDdecay.R
-    ln -sf /root/ngsLD-1.1.1/scripts/LD_blocks.sh /usr/local/bin/LD_blocks.sh
-    ln -sf /root/ngsLD-1.1.1/scripts/prune_graph.pl /usr/local/bin/prune_graph.pl
+    ln -s /opt/ngsLD-1.1.1/ngsLD /opt/bin/ngsLD
+    ln -s /opt/ngsLD-1.1.1/scripts/fit_LDdecay.R /opt/bin/fit_LDdecay.R
+    ln -s /opt/ngsLD-1.1.1/scripts/LD_blocks.sh /opt/bin/LD_blocks.sh
+    ln -s /opt/ngsLD-1.1.1/scripts/prune_graph.pl /opt/bin/prune_graph.pl
 
