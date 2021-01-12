@@ -1,8 +1,8 @@
 ### Usage
 
 ```
-singularity pull --name ngsld.sif shub://James-S-Santangelo/singularity-recipes:ngsld_v1.1.1
-singularity shell ngsld.sif
+singularity pull --name angsd.sif shub://James-S-Santangelo/singularity-recipes:ngsld_v1.1.1
+singularity shell angsd.sif
 angsd [options]
 
 ```
