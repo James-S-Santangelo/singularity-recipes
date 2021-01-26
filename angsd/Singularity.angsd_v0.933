@@ -33,7 +33,7 @@ From: ubuntu:bionic
     export LANG=en_US.UTF-8
 
     # ===========================
-    # Install angsd
+    # Install htslib
     # ===========================
 
     apt-get update &&
