@@ -6,7 +6,7 @@ From: ubuntu:bionic
     AUTHOR James Santangelo
     EMAIL james.santangelo37@gmail.com
     HTSLIB_VERSION 1.11.0
-    NGSLD_VERSION 0.933
+    ANGSD_VERSION 0.933
 
 %environment
 
