@@ -66,19 +66,19 @@ From: ubuntu:bionic
     cd angsd && \
     make
 
-    ln -s /opt/angsd-0.933/angsd /opt/bin/angsd
-    ln -s /opt/angsd-0.933/misc/contamination /opt/bin/contamination
-    ln -s /opt/angsd-0.933/misc/haploToPlink /opt/bin/haploToPlink
-    ln -s /opt/angsd-0.933/misc/ibs /opt/bin/ibs
-    ln -s /opt/angsd-0.933/misc/msHOT2glf /opt/bin/msHOT2glf
-    ln -s /opt/angsd-0.933/misc/msToGlf /opt/bin/msToGlf
-    ln -s /opt/angsd-0.933/misc/NGSadmix /opt/bin/NGSadmix
-    ln -s /opt/angsd-0.933/misc/ngsPSMC /opt/bin/ngsPSMC
-    ln -s /opt/angsd-0.933/misc/plot_psmc.py /opt/bin/plot_psmc.py
-    ln -s /opt/angsd-0.933/misc/printIcounts /opt/bin/printIcounts
-    ln -s /opt/angsd-0.933/misc/realSFS /opt/bin/realSFS
-    ln -s /opt/angsd-0.933/misc/scounts /opt/bin/scounts
-    ln -s /opt/angsd-0.933/misc/smartCount /opt/bin/smartCount
-    ln -s /opt/angsd-0.933/misc/splitgl /opt/bin/splitgl
-    ln -s /opt/angsd-0.933/misc/supersim /opt/bin/supersim
-    ln -s /opt/angsd-0.933/misc/thetaStat /opt/bin/thetaStat
+    ln -s /opt/angsd/angsd /opt/bin/angsd
+    ln -s /opt/angsd/misc/contamination /opt/bin/contamination
+    ln -s /opt/angsd/misc/haploToPlink /opt/bin/haploToPlink
+    ln -s /opt/angsd/misc/ibs /opt/bin/ibs
+    ln -s /opt/angsd/misc/msHOT2glf /opt/bin/msHOT2glf
+    ln -s /opt/angsd/misc/msToGlf /opt/bin/msToGlf
+    ln -s /opt/angsd/misc/NGSadmix /opt/bin/NGSadmix
+    ln -s /opt/angsd/misc/ngsPSMC /opt/bin/ngsPSMC
+    ln -s /opt/angsd/misc/plot_psmc.py /opt/bin/plot_psmc.py
+    ln -s /opt/angsd/misc/printIcounts /opt/bin/printIcounts
+    ln -s /opt/angsd/misc/realSFS /opt/bin/realSFS
+    ln -s /opt/angsd/misc/scounts /opt/bin/scounts
+    ln -s /opt/angsd/misc/smartCount /opt/bin/smartCount
+    ln -s /opt/angsd/misc/splitgl /opt/bin/splitgl
+    ln -s /opt/angsd/misc/supersim /opt/bin/supersim
+    ln -s /opt/angsd/misc/thetaStat /opt/bin/thetaStat
