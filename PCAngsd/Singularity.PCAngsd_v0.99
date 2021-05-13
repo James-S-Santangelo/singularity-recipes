@@ -39,8 +39,9 @@ From: ubuntu:bionic
     # ===========================
 
     cd /opt
-    git clone https://github.com/Rosemeis/pcangsd.git
-    cd pcangsd/
-    pip3 install -r requirements.txt
+    wget https://github.com/Rosemeis/pcangsd/archive/refs/tags/v.0.99.tar.gz &&
+    tar -xvzf v.0.99.tar.gz &&
+    cd pcangsd-v.0.99/ &&
+    pip3 install -r requirements.txt &&
     python3 setup.py build_ext --inplace
 
