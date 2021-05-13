@@ -47,7 +47,7 @@ From: ubuntu:bionic
         libcrypto++-dev \
 
     cd /opt && mkdir bin
-    wget https://github.com/samtools/htslib/archive/1.11.0.tar.gz
+    wget https://github.com/samtools/htslib/archive/1.11.0.tar.gz &&
     tar -xvzf 1.11.0.tar.gz && \
     cd htslib-1.11.0 && \
     autoconf && \
@@ -61,8 +61,10 @@ From: ubuntu:bionic
     # ===========================
 
     cd /opt
-    git clone https://github.com/ANGSD/ngsRelate && \
-    cd ngsRelate && \
+    wget https://github.com/ANGSD/NgsRelate/archive/refs/tags/v2.0.tar.gz &&
+    tar -xvzf v2.0.tar.gz &&
+    cd NgsRelate-2.0 && \
     make HTSSRC=/opt/htslib-1.11.0 && \
 
-    ln -sf /opt/ngsRelate/ngsRelate /opt/bin/ngsRelate
+    chmod 777 /opt/NgsRelate-2.0/ngsRelate &&
+    ln -sf /opt/NgsRelate-2.0/ngsRelate /opt/bin/ngsRelate
