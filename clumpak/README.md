@@ -6,4 +6,6 @@ singularity exec clumpak.sif perl /opt/bin/BestKByEvanno.pl [options]
 ```
 
 **Note:** Only the `BestKByEvanno.pl` pipeline is currently working. The others are failing 
-due to a path issue with `CLUMPP` and maybe `distruct`. Might fix at one point. 
+due to a path issue with `CLUMPP` and maybe `distruct`. Might fix at some point. 
+
+See [CLUMPAK](http://clumpak.tau.ac.il/download.html) for program documentation.
