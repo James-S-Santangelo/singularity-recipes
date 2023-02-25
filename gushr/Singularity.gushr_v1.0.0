@@ -36,6 +36,7 @@ From: ubuntu:20.04
     # Install JAVA and Samtools
     # ===========================
 
+    export DEBIAN_FRONTEND="noninteractive"
     apt-get update &&
     apt-get -y install \
         openjdk-8-jdk \
@@ -46,7 +47,7 @@ From: ubuntu:20.04
     # ===========================
 
     cd /opt && mkdir bin
-    wget https://raw.githubusercontent.com/Gaius-Augustus/Augustus/master/scripts/gtf2gff.pl -P ./bin/gtf2gff.pl
+    wget https://raw.githubusercontent.com/Gaius-Augustus/Augustus/master/scripts/gtf2gff.pl -P /opt/bin/
 
     # ===========================
     # Install GUSHR
@@ -54,7 +55,10 @@ From: ubuntu:20.04
     
     git clone https://github.com/Gaius-Augustus/GUSHR.git
 
-    ln -s GUSHR/gushr.py /opt/bin/gushr.py
-    ln -s GUSH/GeMoMa-1.6.2.jar /opt/bin/GeMoMa-1.6.2.jar
+    chmod ugo+x GUSHR/gushr.py
+    chmod ugo+x GUSHR/GeMoMa-1.6.2.jar
+    chmod ugo+x /opt/bin/gtf2gff.pl
 
-    chmod ugo+w /opt/bin/*
+    ln -s /opt/GUSHR/gushr.py /opt/bin/gushr.py
+    ln -s /opt/GUSHR/GeMoMa-1.6.2.jar /opt/bin/GeMoMa-1.6.2.jar
+
