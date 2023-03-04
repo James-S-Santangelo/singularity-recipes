@@ -1,0 +1,109 @@
+Bootstrap: docker
+From: ubuntu:20.04
+
+%labels
+    
+    AUTHOR James Santangelo
+    EMAIL james.santangelo37@gmail.com
+
+%environment
+
+    export PATH="/opt/bin:$PATH"
+
+%post
+    
+    apt-get update && \
+    apt-get -y --no-install-recommends install \
+        build-essential \
+        wget \
+        git \
+        curl \
+        ca-certificates \
+        locales 
+    
+    # Configure default locale
+    # Taken from https://github.com/nickjer/singularity-r/blob/master/Singularity.3.6.2
+    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+    locale-gen en_US.utf8
+    /usr/sbin/update-locale LANG=en_US.UTF-8
+    export LC_ALL=en_US.UTF-8
+    export LANG=en_US.UTF-8
+
+    # ===========================
+    # Install RAxML 
+    # ===========================
+
+    cd /opt && mkdir bin
+    git clone https://github.com/stamatak/standard-RAxML
+    cd standard-RAxML
+    make -f Makefile.PTHREADS.gcc
+    rm *.o
+
+    chmod ugo+x ./raxmlHPC-PTHREADS
+    ln -sf /opt/standard-RAxML/raxmlHPC-PTHREADS /opt/bin/raxmlHPC-PTHREADS
+
+    # ===========================
+    # Fasta 2 PhyML
+    # ===========================
+
+    cd /opt 
+    wget https://raw.githubusercontent.com/lpipes/tronko/main/scripts/fasta2phyml.pl -P /opt/bin/
+    chmod ugo+x /opt/bin/fasta2phyml.pl
+
+    # ===========================
+    # Install FAMSA 
+    # ===========================
+   
+    git clone https://github.com/refresh-bio/FAMSA
+    cd FAMSA
+    make 
+
+    chmod ugo+x ./famsa
+    ln -sf /opt/FAMSA/famsa /opt/bin/famsa
+
+    # ===========================
+    # Newick Utils
+    # ===========================
+
+    apt-get update && \
+    apt-get -y --no-install-recommends install \
+        autoconf \
+        automake \
+        libtool \
+        flex \
+        bison
+
+    cd /opt
+    git clone https://github.com/tjunier/newick_utils.git
+    cd newick_utils
+    autoreconf -fi
+    ./configure
+    make
+    make check
+    make install
+    
+    # ===========================
+    # Install Tronko
+    # ===========================
+
+    apt-get update && \
+    apt-get -y --no-install-recommends install \
+        zlib1g-dev
+
+    cd /opt
+    git clone https://github.com/lpipes/tronko.git
+    cd tronko/tronko-build
+    make
+    cd ../tronko-assign
+    make
+    cd ..
+
+    chmod ugo+x tronko-build/tronko-build
+    chmod ugo+x tronko-assign/tronko-assign
+
+    ln -sf /opt/tronko/tronko-build/tronko-build /opt/bin/tronko-build
+    ln -sf /opt/tronko/tronko-assign/tronko-assign /opt/bin/tronko-assign
+
+
+
+
