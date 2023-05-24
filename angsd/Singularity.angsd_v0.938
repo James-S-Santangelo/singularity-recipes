@@ -1,11 +1,12 @@
 Bootstrap: docker
-From: ubuntu:bionic
+From: ubuntu:focal
 
 %labels
     
     AUTHOR James Santangelo
     EMAIL james.santangelo37@gmail.com
-    OHANA_VERSION Latest
+    HTSLIB_VERSION 1.16
+    ANGSD_VERSION 0.938
 
 %environment
 
@@ -16,6 +17,7 @@ From: ubuntu:bionic
     apt-get update && \
     apt-get -y --no-install-recommends install \
         build-essential \
+        wget \
         git \
         curl \
         ca-certificates \
@@ -30,29 +32,27 @@ From: ubuntu:bionic
     export LANG=en_US.UTF-8
 
     # ===========================
-    # Install selscan 
+    # Install angsd 
     # ===========================
+    
+    apt-get update &&
+    apt-get -y install \
+        zlib1g \
+        zlib1g-dev \
+        autoconf \
+        libbz2-dev \
+        liblzma-dev \
+        libcurl4-gnutls-dev \
+        libcrypto++-dev
 
-    export DEBIAN_FRONTEND="noninteractive"
-    apt-get update && \
-    apt-get -y --no-install-recommends install \
-        libblas-dev \
-        liblapacke-dev \
-        python-dev \
-        python-pip \
-        python-tk
+    cd /opt && mkdir bin
+    wget https://github.com/ANGSD/angsd/releases/download/0.938/angsd0.938.tar.gz
+    tar -xvf angsd0.938.tar.gz
+    cd htslib
+    make -j4
+    cd ..
+    cd angsd
+    make HTSSRC=../htslib -j4
 
-    pip install setuptools wheel
-    pip install matplotlib numpy 
-
-    cd /opt &&
-    mkdir bin &&
-
-    git clone https://github.com/jade-cheng/ohana
-    cd ohana
-    make
-
-    chmod +x /opt/ohana/tools/*
-
-    ln -s /opt/ohana/bin/* /opt/bin/
-    ln -s /opt/ohana/tools/* /opt/bin/
+    ln -sf /opt/angsd/angsd /opt/bin/angsd
+    ln -sf /opt/angsd/misc/* /opt/bin/
