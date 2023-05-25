@@ -1,13 +1,15 @@
 Bootstrap: docker
-From: ubuntu:bionic
+From: ubuntu:jammy
 
 %labels
     
     AUTHOR James Santangelo
     EMAIL james.santangelo37@gmail.com
     R_VERSION 4.0.3
-    ORTHOFINDER_VERSION XXX
-    MCSCANX_VERSION
+    ORTHOFINDER_VERSION 2.5.5 
+    MCSCANX_VERSION 1.0.0
+    DIAMOND_VERSION 2.0.13
+    R_VERSION 4.3.0
 
 %environment
 
@@ -37,14 +39,15 @@ From: ubuntu:bionic
     # Install R and packages
     # ===========================
 
-    # Install R and littler (for package installs)
-    # Inspiration from Dockerfile by Dirk Eddelbuettel
-    # https://github.com/rocker-org/rocker/blob/master/r-base/4.0.3/Dockerfile
-    R_VERSION=4.0.3
     export DEBIAN_FRONTEND="noninteractive"
-    echo "deb http://cran.r-project.org/bin/linux/ubuntu bionic-cran40/" > /etc/apt/sources.list.d/r.list
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
     apt-get update &&
+    apt-get install -y --no-install-recommends \
+        software-properties-common \
+        dirmngr
+
+    wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
+    add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
+
     apt-get install -y --no-install-recommends \
         libcurl4-openssl-dev \
         libfontconfig1-dev \
@@ -56,26 +59,17 @@ From: ubuntu:bionic
         libpng-dev \
         libtiff5-dev \
         libjpeg-dev \
-        littler \
         r-cran-littler \
-        r-base=${R_VERSION}* \
-        r-base-dev=${R_VERSION}* \
-        r-recommended=${R_VERSION}* 
-    ln -s /usr/lib/R/site-library/littler/examples/install.r /usr/local/bin/install.r 
-    ln -s /usr/lib/R/site-library/littler/examples/install2.r /usr/local/bin/install2.r 
-    ln -s /usr/lib/R/site-library/littler/examples/installBioc.r /usr/local/bin/installBioc.r 
-    ln -s /usr/lib/R/site-library/littler/examples/installDeps.r /usr/local/bin/installDeps.r 
-    ln -s /usr/lib/R/site-library/littler/examples/installGithub.r /usr/local/bin/installGithub.r 
-    ln -s /usr/lib/R/site-library/littler/examples/testInstalled.r /usr/local/bin/testInstalled.r 
-    rm -rf /tmp/downloaded_packages/ /tmp/*.rds 
-    rm -rf /var/lib/apt/lists/*
+        r-base \
+        r-base-dev \
+        r-recommended 
 
     # Install R packages
     R -e "install.packages(c('BiocManager', 'devtools'))"
 
     # Use Bioconductor to install Biostrings and rtracklayer 
     R -e "BiocManager::install(c('Biostrings', 'rtracklayer'))" 
-    
+
     # Install Genespace
     R -e "devtools::install_github('jtlovell/GENESPACE@v1.2.3')"
 
@@ -83,38 +77,30 @@ From: ubuntu:bionic
     # Install Orthofinder 
     # ===========================
 
-    # apt-get update &&
-    # apt-get -y install \
-    #     perl-doc \
-    #     libgetopt-simple-perl \
-    #     libgraph-easy-perl \
-    #     libmath-bigint-perl
-    # 
-    # # IO::Zlib from Github
-    # wget https://github.com/tomhughes/IO-Zlib/archive/1.11.tar.gz
-    # tar -xvzf 1.11.tar.gz
-    # cd IO-Zlib-1.11
-    # perl Makefile.PL
-    # make
-    # make install
+    apt-get update &&
+    apt-get -y install \
+        glibc-source
+    cd /opt && mkdir bin
+    wget --no-check-certificate \
+        https://github.com/davidemms/OrthoFinder/releases/download/2.5.5/OrthoFinder.tar.gz
+    tar -xvzf OrthoFinder.tar.gz
+    ln -s /opt/OrthoFinder/orthofinder /opt/bin/orthofinder
+    ln -s /opt/OrthoFinder/bin/* /opt/bin/
 
     # ===========================
     # Install MCScanX
     # ===========================
 
-    # apt-get update &&
-    # apt-get -y install \
-    #     libgsl-dev \
-    #     zlib1g-dev
-
-    # cd /opt && mkdir bin
-    # wget https://github.com/fgvieira/ngsLD/archive/v1.1.1.tar.gz
-    # tar -xvzf v1.1.1.tar.gz
-    # cd ngsLD-1.1.1
-    # make
-    # ln -s /opt/ngsLD-1.1.1/ngsLD /opt/bin/ngsLD
-    # ln -s /opt/ngsLD-1.1.1/scripts/fit_LDdecay.R /opt/bin/fit_LDdecay.R
-    # ln -s /opt/ngsLD-1.1.1/scripts/LD_blocks.sh /opt/bin/LD_blocks.sh
-    # ln -s /opt/ngsLD-1.1.1/scripts/prune_graph.pl /opt/bin/prune_graph.pl
-
-
+    apt-get update &&
+    apt-get -y install \
+        zip \
+        unzip \
+        default-jdk
+    wget --no-check-certificate \
+        https://github.com/wyp1125/MCScanX/archive/refs/heads/master.zip
+    unzip master.zip
+    cd MCScanX-master
+    make
+    ln -s /opt/MCScanX-master/MCScanX /opt/bin/MCScanX
+    ln -s /opt/MCScanX-master/Duplicate_gene_classifier /opt/bin/Duplicate_gene_classifier
+    ln -s /opt/MCScanX-master/MCScanX_h /opt/bin/MCScanX_h
