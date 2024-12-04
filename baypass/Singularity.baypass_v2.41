@@ -1,0 +1,53 @@
+Bootstrap: docker
+From: ubuntu:bionic
+
+%labels
+    
+    AUTHOR James Santangelo
+    EMAIL james.santangelo37@gmail.com
+    BAYPASS_VERSION 2.41 
+
+%environment
+
+    export PATH="/opt/bin:$PATH"
+
+%post
+    
+    apt-get update && \
+    apt-get -y --no-install-recommends install \
+        build-essential \
+        wget \
+        git \
+        curl \
+        ca-certificates \
+        locales
+    
+    # Configure default locale
+    # Taken from https://github.com/nickjer/singularity-r/blob/master/Singularity.3.6.2
+    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+    locale-gen en_US.utf8
+    /usr/sbin/update-locale LANG=en_US.UTF-8
+    export LC_ALL=en_US.UTF-8
+    export LANG=en_US.UTF-8
+
+    # ===========================
+    # Install BayPass 
+    # ===========================
+
+    apt-get update && \
+    apt-get -y --no-install-recommends install \
+        libomp-dev \
+        gfortran
+
+    cd /opt &&
+    mkdir bin &&
+    wget https://forgemia.inra.fr/mathieu.gautier/baypass_public/-/archive/v2.41/baypass_public-v2.41.tar.gz
+    tar -xvzf baypass_public-v2.41.tar.gz &&
+    cd baypass_public-v2.41/sources
+
+    make clean all FC=gfortran
+
+    ln -s /opt/baypass_public-v2.41/sources/g_baypass /opt/bin/baypass
+
+    make clean
+
