@@ -45,11 +45,13 @@ From: ubuntu:bionic
         liblzma-dev \
         libcurl4-gnutls-dev \
         libcrypto++-dev \
+        libncurses5-dev \
+        libncursesw5-dev
 
     cd /opt && mkdir bin
-    wget https://github.com/samtools/samtools/archive/1.21.0.tar.bz2 &&
-    tar -xvjf 1.21.0.tar.gz && \
-    cd samtools-1.21.0 && \
+    wget https://github.com/samtools/samtools/releases/download/1.21/samtools-1.21.tar.bz2 && 
+    tar -xvjf samtools-1.21.tar.bz2 && \
+    cd samtools-1.21 && \
     autoheader && \
     autoconf -Who-syntax && \
     ./configure && \
