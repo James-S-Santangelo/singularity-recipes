@@ -1,9 +1,10 @@
 ### Usage
 
 ```
-singularity pull --name ngsld.sif library://james-s-santangelo/ngsld/:ngsld:1.1.1
+singularity pull --name ngsld.sif library://james-s-santangelo/ngsld/:ngsld:1.2.0
 singularity exec ngsld.sif ngsld [options]
-singularity exec ngsld.sif perl /opt/bin/prune_graph.pl  ## Accessory scripts
+singularity exec prune_graph [options] ## Accessory scripts
 ```
 
 See [ngsLD](https://github.com/fgvieira/ngsLD) for program documentation.
+See [prune_graph](https://github.com/fgvieira/prune_graph) for program documentation.
