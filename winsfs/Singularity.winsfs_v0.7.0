@@ -1,0 +1,50 @@
+Bootstrap: docker
+From: ubuntu:bionic
+
+%labels
+    
+    AUTHOR James Santangelo
+    EMAIL james.santangelo37@gmail.com
+    RUST_VERSION 1.94.1
+    CIRCOS_VERSION 0.7.0
+
+%environment
+
+    export PATH="/opt/bin:$PATH"
+
+%post
+    
+    apt-get update && \
+    apt-get -y --no-install-recommends install \
+        build-essential \
+        wget \
+        git \
+        curl \
+        locales \
+        ca-certificates
+
+    # Configure default locale
+    # Taken from https://github.com/nickjer/singularity-r/blob/master/Singularity.3.6.2
+    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+    locale-gen en_US.utf8
+    /usr/sbin/update-locale LANG=en_US.UTF-8
+    export LC_ALL=en_US.UTF-8
+    export LANG=en_US.UTF-8
+
+    # ===========================
+    # Install Rust
+    # ===========================
+
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y &&
+    . "$HOME/.cargo/env" &&
+    rustup install 1.94.1 &&
+    rustup default 1.94.1 &&
+    
+    # ===========================
+    # Install winsfs
+    # ===========================
+
+    cargo install --version 0.7.0 winsfs-cli &&
+    mkdir /opt/bin
+    cp ${HOME}/.cargo/bin/winsfs /opt/bin &&
+    chmod 755 /opt/bin/winsfs
